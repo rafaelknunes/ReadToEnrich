@@ -34,6 +34,7 @@ Cadastrar um novo livro.
 **códigos de status**
 
 `201` criado com sucesso
+
 `400` validação falhou
 
 ---
