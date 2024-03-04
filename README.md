@@ -45,7 +45,7 @@ Cadastrar um novo livro.
 {
     "titulo": "Harry Potter e a Pedra Filosofal",
     "autor": "J.K. Rowling",
-    "ISBN": "1234567890",
+    "isbn": "1234567890",
     "categoria": "Ficção",
     "imagem": "https://lojaleiturinha.vtexassets.com/arquivos/ids/156464-800-800?v=638337749713470000&width=800&height=800&aspect=true"
 }
