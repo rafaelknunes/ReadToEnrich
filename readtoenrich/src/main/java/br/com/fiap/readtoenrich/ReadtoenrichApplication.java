@@ -1,13 +1,13 @@
-package br.com.fiap.reachtoenrich;
+package br.com.fiap.readtoenrich;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ReachtoenrichApplication {
+public class ReadtoenrichApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ReachtoenrichApplication.class, args);
+		SpringApplication.run(ReadtoenrichApplication.class, args);
 	}
 
 }

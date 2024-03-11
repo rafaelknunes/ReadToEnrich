@@ -1,4 +1,4 @@
-package br.com.fiap.reachtoenrich.controller;
+package br.com.fiap.readtoenrich.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.fiap.reachtoenrich.model.Livro;
+import br.com.fiap.readtoenrich.model.Livro;
 
 //@RestController: Esta anotação indica que a classe é um Controller, um componente do Spring que lida com requisições HTTP. Os dados de retorno são automaticamente escritos no corpo da resposta, não precisando de @ResponseBody.
 @RestController
@@ -39,7 +39,7 @@ public class LivroController {
     // Caso nenhum JSON seja enviado, o Spring retornará um erro 400 (Bad Request).
     public ResponseEntity<Livro> createBook(@RequestBody Livro livro) {
         // Verifica se o título do livro é nulo ou vazio
-        if (livro.titulo() == null || livro.titulo().isEmpty()) {
+        if (livro.getTitulo() == null || livro.getTitulo().isEmpty()) {
             log.info("Falha ao cadastrar livro: título inválido");
             // Retorna uma resposta com o status 400 Bad Request
             return ResponseEntity
