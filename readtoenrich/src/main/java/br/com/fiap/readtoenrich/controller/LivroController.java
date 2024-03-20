@@ -41,17 +41,17 @@ public class LivroController {
     LivroRepository livroRepository;
 
     // Esta anotação indica que o método `getBookList()` será chamado quando uma requisição GET para `/livro/buscar` for feita. O método retorna uma lista de livros, que é o conteúdo atual do "repositório".
-    @GetMapping("/buscar")
-    public List<Livro> getBookList() {
+    @GetMapping
+    public List<Livro> index() {
         // O método findAll() é um dos métodos herdados de JpaRepository. 
         // Ele busca todas as instâncias de Livro no banco de dados e as retorna em uma lista.
         return livroRepository.findAll();
     }
 
     // Anotação que indica que o método `create(@RequestBody Livro livro)` será chamado para tratar requisições POST em `/livro/cadastrar`. Este método é responsável por adicionar um novo `Livro` ao repositório.
-    @PostMapping("/cadastrar")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED) // Define o status HTTP da resposta como 201 Created.
-    public Livro createBook(@RequestBody Livro livro) {
+    public Livro create(@RequestBody Livro livro) {
         log.info("Cadastrando livro: {}", livro);
         
         // Validação simplificada do título do livro
@@ -63,7 +63,7 @@ public class LivroController {
         return livroRepository.save(livro); // Salva o livro no banco de dados e retorna o livro salvo.
     }
 
-    @GetMapping("/buscar/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<Livro> get(@PathVariable Long id) {
         log.info("Buscar por id: {}", id);
 
@@ -71,10 +71,9 @@ public class LivroController {
                 .findById(id)
                 .map(c -> ResponseEntity.ok(c))
                 .orElse(ResponseEntity.notFound().build());
-
     }
 
-    @DeleteMapping("/deletar/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<Object> destroy(@PathVariable Long id) {
         log.info("Apagando livro {}", id);
 
@@ -86,7 +85,7 @@ public class LivroController {
 
     }
 
-    @PutMapping("/atualizar/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody Livro livro){
         log.info("Atualizando livro de id {} para {}", id, livro);
         

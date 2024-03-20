@@ -3,6 +3,7 @@
 ## Requisitos
 
 - [X] CRUD Livros
+- [ ] CRUD Categorias
 - [ ] CRUD Usuários
 - [ ] CRUD MeusLivros
 - [ ] Autenticação
@@ -11,7 +12,7 @@
 
 ### CRUD Livros
 
-`GET` /livro/buscar
+`GET` /livro
 
 Lista todos os livros cadastrados no sistema.
 
@@ -19,7 +20,7 @@ Lista todos os livros cadastrados no sistema.
 
 ---
 
-`GET` /livro/buscar/{id}
+`GET` /livro/{id}
 
 Retorna os detalhes de um livro com o `id` informado.
 
@@ -30,7 +31,7 @@ Retorna os detalhes de um livro com o `id` informado.
 
 ---
 
-`POST` /livro/cadastrar
+`POST` /livro
 
 Cadastrar um novo livro.
 
@@ -49,7 +50,7 @@ Cadastrar um novo livro.
 
 ---
 
-`DELETE` /livro/deletar/{id} 
+`DELETE` /livro/{id} 
 
 Apaga o livro com o `id` informado.
 
@@ -60,8 +61,7 @@ Apaga o livro com o `id` informado.
 
 ---
 
-
-`PUT` /livro/atualizar/{id} 
+`PUT` /livro/{id} 
 
 Altera o livro com o `id` informado.
 
@@ -93,3 +93,22 @@ Altera o livro com o `id` informado.
 }
 
 ```
+
+----
+
+### CRUD Categorias
+
+`POST` /categoria
+
+Cadastrar um novo livro.
+
+| campo | tipo | obrigatório | descrição
+|-------|------|:-------------:|-----------
+|nome|string|✅|O nome da categoria. DÚVIDAS: Deve ser único? Devemos colocar a validação aqui no readme??
+
+**códigos de status**
+
+`201` criado com sucesso
+`400` validação falhou
+
+---
