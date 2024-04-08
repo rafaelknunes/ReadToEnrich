@@ -1,0 +1,32 @@
+
+# Cadastrar Livro
+POST http://localhost:8080/livro
+Content-Type: application/json
+
+{
+    "titulo": "Titulo",
+    "autor": "J.K. Rowling",
+    "isbn": "999999999",
+    "categoria": "Ficção",
+    "imagem": "https://lojaleiturinha.vtexassets.com/arquivos/ids/156464-800-800?v=638337749713470000&width=800&height=800&aspect=true"
+}
+
+#### Buscar todos os livros
+GET http://localhost:8080/livro
+
+#### Buscar Livro por id
+GET http://localhost:8080/livro/3
+
+#### Atualizar Livro
+PUT http://localhost:8080/livro/3
+
+#### Remover Livro por id
+DELETE http://localhost:8080/livro/3
+
+#### Cadastrar Categoria
+POST http://localhost:8080/categoria
+Content-Type: application/json
+
+{
+    "nome": "Romance"
+}

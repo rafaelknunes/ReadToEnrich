@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 // Esta é uma anotação do Lombok que é uma espécie de atalho para @ToString, getters, setters, etc.
@@ -20,6 +21,7 @@ public class Livro {
     // Marca o campo id como a chave primária da tabela de livros no banco de dados.
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Pattern(regexp = "^[A-Za-z0-9 ]*$" , message = "O título do livro deve conter apenas letras e números")
     private String titulo;
     private String autor;
     private String isbn;

@@ -21,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.fiap.readtoenrich.model.Livro;
 import br.com.fiap.readtoenrich.repository.LivroRepository;
+import jakarta.validation.Valid;
 
 //@RestController: Esta anotação indica que a classe é um Controller, um componente do Spring que lida com requisições HTTP. Os dados de retorno são automaticamente escritos no corpo da resposta, não precisando de @ResponseBody.
 @RestController
@@ -51,7 +52,7 @@ public class LivroController {
     // Anotação que indica que o método `create(@RequestBody Livro livro)` será chamado para tratar requisições POST em `/livro/cadastrar`. Este método é responsável por adicionar um novo `Livro` ao repositório.
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) // Define o status HTTP da resposta como 201 Created.
-    public Livro create(@RequestBody Livro livro) {
+    public Livro create(@RequestBody @Valid Livro livro) {
         log.info("Cadastrando livro: {}", livro);
         
         // Validação simplificada do título do livro
