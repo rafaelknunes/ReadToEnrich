@@ -1,114 +1,24 @@
 # ReadToEnrich
 
-## Requisitos
+Aplicativo onde a comunidade de usuários pode cadastrar livros, adicionar a sua lista de desejos, e avaliar livros que já leram.
 
-- [X] CRUD Livros
-- [ ] CRUD Categorias
-- [ ] CRUD Usuários
-- [ ] CRUD MeusLivros
-- [ ] Autenticação
+## Autores
 
-## Endpoints
-
-### CRUD Livros
-
-`GET` /livro
-
-Lista todos os livros cadastrados no sistema.
-
-`200` sucesso
+- Gabrielle da Silva Stanguini- RM98786
+- Rafael Klanfer Nunes - RM99791
 
 ---
 
-`GET` /livro/{id}
+## Estrutura do Projeto
 
-Retorna os detalhes de um livro com o `id` informado.
+### ReadToEnrich - Backend
 
-**códigos de status**
+Contém a API RESTful que será consumida pelo frontend.
 
-`200` sucesso
-`404` id não encontrado
+Feito usando JAVA - Spring Boot.
 
----
+### ReadToEnrichWeb - Frontend
 
-`POST` /livro
+Contém a aplicação web que consumirá a API RESTful.
 
-Cadastrar um novo livro.
-
-| campo | tipo | obrigatório | descrição
-|-------|------|:-------------:|-----------
-|titulo|string|✅|O titulo do livro
-|autor|string|✅|O nome do autor(s) do livro
-|isbn|string|✅|Um identificador único para o livro
-|categoria|string|✅|Um nome curto para identificar a categoria. Pré cadastrada no sistema.
-|imagem|string|❌|Uma url que referencia a imagem do livro.
-
-**códigos de status**
-
-`201` criado com sucesso
-`400` validação falhou
-
----
-
-`DELETE` /livro/{id} 
-
-Apaga o livro com o `id` informado.
-
-**códigos de status**
-
-`204` apagado com sucesso
-`404` id não encontrado
-
----
-
-`PUT` /livro/{id} 
-
-Altera o livro com o `id` informado.
-
-| campo | tipo | obrigatório | descrição
-|-------|------|:-------------:|-----------
-|titulo|string|✅|O titulo do livro
-|autor|string|✅|O nome do autor(s) do livro
-|isbn|string|✅|Um identificador único para o livro
-|categoria|string|✅|Um nome curto para identificar a categoria. Pré cadastrada no sistema.
-|imagem|string|❌|Uma url que referencia a imagem do livro.
-
-**códigos de status**
-
-`200` sucesso
-`404` id não encontrado
-`400` validação falhou
-
----
-
-**Schema**
-
-```js
-{
-    "titulo": "Harry Potter e a Pedra Filosofal",
-    "autor": "J.K. Rowling",
-    "isbn": "1234567890",
-    "categoria": "Ficção",
-    "imagem": "https://lojaleiturinha.vtexassets.com/arquivos/ids/156464-800-800?v=638337749713470000&width=800&height=800&aspect=true"
-}
-
-```
-
-----
-
-### CRUD Categorias
-
-`POST` /categoria
-
-Cadastrar um novo livro.
-
-| campo | tipo | obrigatório | descrição
-|-------|------|:-------------:|-----------
-|nome|string|✅|O nome da categoria. DÚVIDAS: Deve ser único? Devemos colocar a validação aqui no readme??
-
-**códigos de status**
-
-`201` criado com sucesso
-`400` validação falhou
-
----
+Feito usando Next.js.
