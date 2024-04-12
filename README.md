@@ -2,6 +2,10 @@
 
 Aplicativo onde a comunidade de usuários pode cadastrar livros, adicionar a sua lista de desejos, e avaliar livros que já leram.
 
+## Link para o repositório
+
+https://github.com/rafaelknunes/ReadToEnrich
+
 ## Autores
 
 - Gabrielle da Silva Stanguini- RM98786
