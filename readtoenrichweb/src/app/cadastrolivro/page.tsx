@@ -1,7 +1,6 @@
-"use client"
+"use client";
 
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Input, Button } from '@nextui-org/react';
 import NavBar from "@/components/NavBar";
 
@@ -13,12 +12,12 @@ export default function CadastroLivro() {
     categoria: '',
     imagem: ''
   });
+  const [message, setMessage] = useState('');
+  const [isError, setIsError] = useState(false);
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     const url = 'http://localhost:8080/livro';
-
-    console.log(` LOG:: Book Data ${JSON.stringify(book)}`);
 
     try {
       const response = await fetch(url, {
@@ -29,24 +28,32 @@ export default function CadastroLivro() {
         body: JSON.stringify(book),
       });
 
-      // Logging the response status and status text
-      console.log(` LOG:: Response status: ${response.status}, Status text: ${response.statusText}`);
+      console.log(`Response status: ${response.status}, Status text: ${response.statusText}`);
 
       if (response.ok) {
-        alert('Livro cadastrado com sucesso!');
+        setMessage('Livro cadastrado com sucesso!');
+        setIsError(false);
         setBook({ titulo: '', autor: '', isbn: '', categoria: '', imagem: '' }); // Reset form
+        setTimeout(() => setMessage(''), 3000); // Clear message after 3 seconds
       } else {
-        console.log('Response not OK:', response);
-        throw new Error('Falha ao cadastrar livro');
+        setMessage('Falha ao cadastrar livro');
+        setIsError(true);
+        setTimeout(() => setMessage(''), 3000); // Clear message after 3 seconds
       }
     } catch (error) {
       console.error('Erro ao cadastrar livro:', error);
-      alert('Erro ao cadastrar livro!');
+      setMessage('Erro ao cadastrar livro!');
+      setIsError(true);
+      setTimeout(() => setMessage(''), 3000); // Clear message after 3 seconds
     }
   };
 
   const handleChange = (e: { target: { name: any; value: any; }; }) => {
-    setBook({ ...book, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setBook((prevBook) => ({
+      ...prevBook,
+      [name]: value
+    }));
   };
 
   return (
@@ -54,6 +61,11 @@ export default function CadastroLivro() {
       <NavBar active="cadastrolivro" />
 
       <section className="flex flex-col gap-4 bg-orange-100 min-w-[600px] mt-8 px-4 py-8 rounded items-center">
+        {message && (
+          <div className={`px-4 py-2 rounded text-white ${isError ? 'bg-red-500' : 'bg-green-500'}`}>
+            {message}
+          </div>
+        )}
         <h1 className="text-amber-900 font-bold text-xl">Cadastrar Livro</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
           <Input label="Título" value={book.titulo} onChange={handleChange} name="titulo" />
