@@ -26,3 +26,6 @@ Feito usando JAVA - Spring Boot.
 Contém a aplicação web que consumirá a API RESTful.
 
 Feito usando Next.js.
+
+---
+

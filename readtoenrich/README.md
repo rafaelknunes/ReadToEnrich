@@ -112,3 +112,21 @@ Cadastrar um novo livro.
 `400` validação falhou
 
 ---
+
+# # **USO**
+
+Acesse o arquivo ReadToEnrichApplication.java e execute a aplicação.
+
+Se a porta 8080 estiver em uso, use o comando abaixo no prompt do Windows para finalizar a aplicação:
+
+Para identificar o PID:
+
+```shell
+netstat -aon | findstr :8080
+```
+
+E depois para finalizar:
+
+```shell    
+taskkill /PID <type-your-PID-here> /F
+```
