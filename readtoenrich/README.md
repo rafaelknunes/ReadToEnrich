@@ -3,7 +3,7 @@
 ## Requisitos
 
 - [X] CRUD Livros
-- [ ] CRUD Categorias
+- [X] CRUD Categorias
 - [ ] CRUD Usuários
 - [ ] CRUD MeusLivros
 - [ ] Autenticação
@@ -97,6 +97,14 @@ Altera o livro com o `id` informado.
 ----
 
 ### CRUD Categorias
+
+`GET` /categoria?nome=<Nome da Categoria>&mes=<Data da Criação>
+
+Lista as categorias por Nome, Mês, ou Combinação.
+
+`200` sucesso
+
+---
 
 `POST` /categoria
 
