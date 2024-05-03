@@ -19,31 +19,19 @@ export default function CadastroLivro() {
 
   useEffect(() => {
     const fetchCategorias = async () => {
-      const requestOptions = {
-        method: 'GET',
-        headers: {
-          'Cache-Control': 'max-age=3600' // Instrui o navegador a revalidar o cache após 1 hora
-        }
-      };
-  
       try {
-        const response = await fetch('http://localhost:8080/categoria', requestOptions);
-        if (response.ok) {
-          const data = await response.json();
-          setCategorias(data);
-        } else {
-          throw new Error('Falha ao buscar categorias');
-        }
+        const response = await fetch('http://localhost:8080/categoria');
+        const data = await response.json();
+        setCategorias(data);
+        setLoading(false);
       } catch (error) {
         console.error('Erro ao carregar categorias:', error);
-      } finally {
         setLoading(false);
       }
     };
-  
+
     fetchCategorias();
-  }, []);  // Depende do array vazio para garantir que a função seja chamada apenas uma vez após o componente ser montado
-  
+  }, []);
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();

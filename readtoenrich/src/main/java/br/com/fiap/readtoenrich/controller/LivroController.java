@@ -1,15 +1,9 @@
 package br.com.fiap.readtoenrich.controller;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
@@ -31,11 +25,13 @@ import br.com.fiap.readtoenrich.model.Livro;
 import br.com.fiap.readtoenrich.repository.LivroRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+
 //@RestController: Esta anotação indica que a classe é um Controller, um componente do Spring que lida com requisições HTTP. Os dados de retorno são automaticamente escritos no corpo da resposta, não precisando de @ResponseBody.
 @RestController
 //@RequestMapping("livro"): Define a rota base para todos os métodos dentro desse Controller. Assim, todas as requisições para esse Controller começarão com /livro.
 @RequestMapping("livro")
 @Slf4j
+@CacheConfig(cacheNames = "livros")
 public class LivroController {
 
     // Aqui temos uma simulação de um repositório (banco de dados), utilizando uma lista em memória para armazenar objetos `Livro`. Em um cenário real, provavelmente estaríamos injetando um repositório real aqui, possivelmente utilizando `@Autowired`.
@@ -50,6 +46,7 @@ public class LivroController {
     // Método que retorna todos os livros cadastrados no repositório.
     // Se usuário passar parâmetro `titulo`, retorna apenas os livros que contém o título informado.
     @GetMapping
+    @Cacheable
     public Page<Livro> index(
 
         @RequestParam(required = false) String titulo,

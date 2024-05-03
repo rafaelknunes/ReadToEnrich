@@ -7,6 +7,9 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("categoria")
 @Slf4j
+@CacheConfig(cacheNames = "categorias")
 public class CategoriaController {
     
     @Autowired
@@ -35,6 +39,9 @@ public class CategoriaController {
 
     // Método para buscar todas as categorias
     @GetMapping
+    // Esta anotação indica que o resultado deste método deve ser armazenado em cache. 
+    //O valor passado como argumento é o nome do cache.
+    @Cacheable
     public List<Categoria> index() {
         return categoriaRepository.findAll();
     }
@@ -42,6 +49,7 @@ public class CategoriaController {
     // Método para criar uma nova categoria
     @PostMapping
     @ResponseStatus(CREATED)
+    @CacheEvict(allEntries = true) // Esta anotação é usada para limpar o cache. O valor passado como argumento é o nome do cache.
     public Categoria create(@RequestBody @Valid Categoria categoria) {
         log.info("cadastrando categoria: {}", categoria);
         return categoriaRepository.save(categoria);

@@ -21,6 +21,8 @@ Contém a API RESTful que será consumida pelo frontend.
 
 Feito usando JAVA - Spring Boot.
 
+Documentação em: http://localhost:8080/swagger-ui/index.html
+
 ### ReadToEnrichWeb - Frontend
 
 Contém a aplicação web que consumirá a API RESTful.
