@@ -108,7 +108,7 @@ export default function CadastroLivro() {
             </div>
           )}
           <Input label="URL da Imagem" value={book.imagem} onChange={handleChange} name="imagem" />
-          <Button color="primary" type="submit" className="w-full">Cadastrar Livro</Button>
+          <Button color="secondary" type="submit" className="w-full">Cadastrar Livro</Button>
         </form>
       </section>
     </main>

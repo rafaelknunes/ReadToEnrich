@@ -7,7 +7,7 @@ interface NavBarProps {
 export default function NavBar(props: NavBarProps) {
   const { active } = props;
   const classActive = "text-base font-medium text-white border-b-2 border-orange-300 pb-1";
-  const classInactive = "text-base font-medium text-amber-300 hover:text-white hover:border-orange-300 hover:border-b-2 pb-1";
+  const classInactive = "text-base font-medium text-amber-100 hover:text-white hover:border-orange-300 hover:border-b-2 pb-1";
 
   return (
     <nav className="flex w-full justify-between items-center px-8 py-1 bg-amber-900">
