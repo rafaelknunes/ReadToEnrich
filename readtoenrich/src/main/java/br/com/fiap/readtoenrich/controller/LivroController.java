@@ -1,11 +1,18 @@
 package br.com.fiap.readtoenrich.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -23,7 +31,6 @@ import br.com.fiap.readtoenrich.model.Livro;
 import br.com.fiap.readtoenrich.repository.LivroRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-
 //@RestController: Esta anotação indica que a classe é um Controller, um componente do Spring que lida com requisições HTTP. Os dados de retorno são automaticamente escritos no corpo da resposta, não precisando de @ResponseBody.
 @RestController
 //@RequestMapping("livro"): Define a rota base para todos os métodos dentro desse Controller. Assim, todas as requisições para esse Controller começarão com /livro.
@@ -32,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 public class LivroController {
 
     // Aqui temos uma simulação de um repositório (banco de dados), utilizando uma lista em memória para armazenar objetos `Livro`. Em um cenário real, provavelmente estaríamos injetando um repositório real aqui, possivelmente utilizando `@Autowired`.
-    List<Livro> repository = new ArrayList<>();
+    //List<Livro> repository = new ArrayList<>();
 
     // Esta anotação é usada pelo Spring para realizar a injeção de dependência. O Spring irá procurar um 
     // bean que corresponda ao tipo LivroRepository e injetá-lo automaticamente nesta variável. Isso elimina 
@@ -40,12 +47,20 @@ public class LivroController {
     @Autowired 
     LivroRepository livroRepository;
 
-    // Esta anotação indica que o método `getBookList()` será chamado quando uma requisição GET para `/livro/buscar` for feita. O método retorna uma lista de livros, que é o conteúdo atual do "repositório".
+    // Método que retorna todos os livros cadastrados no repositório.
+    // Se usuário passar parâmetro `titulo`, retorna apenas os livros que contém o título informado.
     @GetMapping
-    public List<Livro> index() {
-        // O método findAll() é um dos métodos herdados de JpaRepository. 
-        // Ele busca todas as instâncias de Livro no banco de dados e as retorna em uma lista.
-        return livroRepository.findAll();
+    public Page<Livro> index(
+
+        @RequestParam(required = false) String titulo,
+
+        @PageableDefault(sort = "titulo", direction = Direction.DESC) Pageable pageable
+        
+    ){
+        if (titulo != null){
+            return livroRepository.findByTitulo(titulo, pageable);
+        }
+        return livroRepository.findAll(pageable);
     }
 
     // Anotação que indica que o método `create(@RequestBody Livro livro)` será chamado para tratar requisições POST em `/livro/cadastrar`. Este método é responsável por adicionar um novo `Livro` ao repositório.
@@ -56,7 +71,9 @@ public class LivroController {
         
         // Validação simplificada do título do livro
         if (livro.getTitulo() == null || livro.getTitulo().isEmpty()) {
+
             log.info("Falha ao cadastrar livro: título inválido");
+
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Título do livro é inválido");
         }
 
@@ -102,9 +119,5 @@ public class LivroController {
         livroRepository
             .findById(id)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrado"));
-        
     }
-
-
-
 }

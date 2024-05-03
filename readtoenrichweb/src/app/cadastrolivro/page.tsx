@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input, Button } from '@nextui-org/react';
 import NavBar from "@/components/NavBar";
 
@@ -9,11 +9,29 @@ export default function CadastroLivro() {
     titulo: '',
     autor: '',
     isbn: '',
-    categoria: '',
+    categoria: {id: ''},
     imagem: ''
   });
+  const [categorias, setCategorias] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
   const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    const fetchCategorias = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/categoria');
+        const data = await response.json();
+        setCategorias(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Erro ao carregar categorias:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchCategorias();
+  }, []);
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
@@ -28,12 +46,10 @@ export default function CadastroLivro() {
         body: JSON.stringify(book),
       });
 
-      console.log(`Response status: ${response.status}, Status text: ${response.statusText}`);
-
       if (response.ok) {
         setMessage('Livro cadastrado com sucesso!');
         setIsError(false);
-        setBook({ titulo: '', autor: '', isbn: '', categoria: '', imagem: '' }); // Reset form
+        setBook({ titulo: '', autor: '', isbn: '', categoria: { id: '' }, imagem: '' }); // Reset form
         setTimeout(() => setMessage(''), 3000); // Clear message after 3 seconds
       } else {
         setMessage('Falha ao cadastrar livro');
@@ -50,11 +66,21 @@ export default function CadastroLivro() {
 
   const handleChange = (e: { target: { name: any; value: any; }; }) => {
     const { name, value } = e.target;
-    setBook((prevBook) => ({
-      ...prevBook,
-      [name]: value
-    }));
+    if (name === "categoria") {
+      // Se o nome é "categoria", ajustamos para definir o id da categoria dentro do objeto
+      setBook(prevBook => ({
+        ...prevBook,
+        categoria: { id: value }
+      }));
+    } else {
+      // Para outros campos, mantemos o comportamento original
+      setBook(prevBook => ({
+        ...prevBook,
+        [name]: value
+      }));
+    }
   };
+  
 
   return (
     <main className="flex min-h-screen flex-col items-center">
@@ -71,7 +97,16 @@ export default function CadastroLivro() {
           <Input label="Título" value={book.titulo} onChange={handleChange} name="titulo" />
           <Input label="Autor" value={book.autor} onChange={handleChange} name="autor" />
           <Input label="ISBN" value={book.isbn} onChange={handleChange} name="isbn" />
-          <Input label="Categoria" value={book.categoria} onChange={handleChange} name="categoria" />
+          {loading ? <p>Carregando categorias...</p> : (
+            <div>
+              <label>Categoria</label>
+              <select name="categoria" onChange={handleChange} value={book.categoria.id} className="w-full p-2 border rounded">
+              {categorias.map((categoria: any) => (
+                <option key={categoria.id} value={categoria.id}>{categoria.nome}</option>
+              ))}
+            </select>
+            </div>
+          )}
           <Input label="URL da Imagem" value={book.imagem} onChange={handleChange} name="imagem" />
           <Button color="primary" type="submit" className="w-full">Cadastrar Livro</Button>
         </form>
