@@ -1,5 +1,6 @@
 package br.com.fiap.readtoenrich.controller;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -23,6 +24,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.fiap.readtoenrich.model.Livro;
 import br.com.fiap.readtoenrich.repository.LivroRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("livro")
 @Slf4j
 @CacheConfig(cacheNames = "livros")
+@Tag(name = "livros", description = "Endpoint relacionados com livros cadastrados")
 public class LivroController {
 
     // Aqui temos uma simulação de um repositório (banco de dados), utilizando uma lista em memória para armazenar objetos `Livro`. Em um cenário real, provavelmente estaríamos injetando um repositório real aqui, possivelmente utilizando `@Autowired`.
@@ -47,12 +53,10 @@ public class LivroController {
     // Se usuário passar parâmetro `titulo`, retorna apenas os livros que contém o título informado.
     @GetMapping
     @Cacheable
+    @Operation(summary = "Lista todos os livros cadastradas no sistema.", description = "Endpoint que retorna um page de objetos do tipo livro os livros cadastrados")
     public Page<Livro> index(
-
         @RequestParam(required = false) String titulo,
-
-        @PageableDefault(sort = "titulo", direction = Direction.DESC) Pageable pageable
-        
+        @ParameterObject @PageableDefault(sort = "titulo", direction = Direction.DESC) Pageable pageable
     ){
         if (titulo != null){
             return livroRepository.findByTitulo(titulo, pageable);
@@ -63,7 +67,12 @@ public class LivroController {
     // Anotação que indica que o método `create(@RequestBody Livro livro)` será chamado para tratar requisições POST em `/livro/cadastrar`. Este método é responsável por adicionar um novo `Livro` ao repositório.
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) // Define o status HTTP da resposta como 201 Created.
-    public Livro create(@RequestBody @Valid Livro livro) {
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "400", description = "Erro de validação da livro"),
+            @ApiResponse(responseCode = "201", description = "Livro cadastrado com sucesso")
+    })
+    @Operation(summary = "Cadastro de um novo livro.")
+    public Livro create(@ParameterObject @RequestBody @Valid Livro livro) {
         log.info("Cadastrando livro: {}", livro);
         
         // Validação simplificada do título do livro
@@ -78,6 +87,7 @@ public class LivroController {
     }
 
     @GetMapping("{id}")
+    @Operation(summary = "Busca livro por id.")
     public ResponseEntity<Livro> get(@PathVariable Long id) {
         log.info("Buscar por id: {}", id);
 
@@ -88,6 +98,7 @@ public class LivroController {
     }
 
     @DeleteMapping("{id}")
+    @Operation(summary = "Deleta livro por id.")
     public ResponseEntity<Object> destroy(@PathVariable Long id) {
         log.info("Apagando livro {}", id);
 
@@ -100,7 +111,8 @@ public class LivroController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody Livro livro){
+    @Operation(summary = "Edita livro por id.")
+    public ResponseEntity<Object> update(@PathVariable Long id, @ParameterObject @RequestBody Livro livro){
         log.info("Atualizando livro de id {} para {}", id, livro);
         
         verificarSeExisteLivro(id);

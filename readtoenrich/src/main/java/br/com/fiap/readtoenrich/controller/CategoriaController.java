@@ -6,6 +6,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 import java.util.List;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -25,6 +26,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.fiap.readtoenrich.model.Categoria;
 import br.com.fiap.readtoenrich.repository.CategoriaRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("categoria")
 @Slf4j
 @CacheConfig(cacheNames = "categorias")
+@Tag(name = "categorias", description = "Endpoint relacionados com categorias de livros")
 public class CategoriaController {
     
     @Autowired
@@ -40,8 +47,10 @@ public class CategoriaController {
     // Método para buscar todas as categorias
     @GetMapping
     // Esta anotação indica que o resultado deste método deve ser armazenado em cache. 
-    //O valor passado como argumento é o nome do cache.
+    // O valor passado como argumento é o nome do cache.
     @Cacheable
+    // Documentação
+    @Operation(summary = "Lista todas as categorias cadastradas no sistema.", description = "Endpoint que retorna um array de objetos do tipo categoria com todas as categorias do sistema atual")
     public List<Categoria> index() {
         return categoriaRepository.findAll();
     }
@@ -50,13 +59,19 @@ public class CategoriaController {
     @PostMapping
     @ResponseStatus(CREATED)
     @CacheEvict(allEntries = true) // Esta anotação é usada para limpar o cache. O valor passado como argumento é o nome do cache.
-    public Categoria create(@RequestBody @Valid Categoria categoria) {
+    @Operation(summary = "Cadastra uma nova categoria.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "400", description = "Erro de validação da categoria"),
+            @ApiResponse(responseCode = "201", description = "Categoria cadastrada com sucesso")
+    })
+    public Categoria create(@ParameterObject @RequestBody @Valid Categoria categoria) {
         log.info("cadastrando categoria: {}", categoria);
         return categoriaRepository.save(categoria);
     }
 
     // Método para buscar uma categoria por id
     @GetMapping("{id}")
+    @Operation(summary = "Busca categoria por id.")
     public ResponseEntity<Categoria> get(@PathVariable Long id) {
         log.info("Buscar por id: {}", id);
 
@@ -70,6 +85,7 @@ public class CategoriaController {
     // Método para deletar uma categoria por id
     @DeleteMapping("{id}")
     @ResponseStatus(NO_CONTENT)
+    @Operation(summary = "Deleta categoria por id.")
     public void destroy(@PathVariable Long id) {
         log.info("apagando categoria {}", id);
 
@@ -79,7 +95,9 @@ public class CategoriaController {
 
     // Método para atualizar uma categoria por id
     @PutMapping("{id}")
-    public Categoria update(@PathVariable Long id, @RequestBody Categoria categoria){
+    @CacheEvict(allEntries = true)
+    @Operation(summary = "Edita categoria por id.")
+    public Categoria update(@PathVariable Long id, @ParameterObject @RequestBody Categoria categoria){
         log.info("atualizando categoria id {} para {}", id, categoria);
         
         verificarSeExisteCategoria(id);

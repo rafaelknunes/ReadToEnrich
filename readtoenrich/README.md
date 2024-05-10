@@ -1,5 +1,7 @@
 # ReadToEnrich - Backend
 
+#### Para ver a documentação no Swagger acesse: http://localhost:8080/docs
+
 ## Requisitos
 
 - [X] CRUD Livros
